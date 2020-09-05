@@ -80,6 +80,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "flutter_webview_plugin",
+      "rootUri": "../ext/flutter_webview_plugin",
+      "packageUri": "lib/",
+      "languageVersion": "2.0"
+    },
+    {
       "name": "intl",
       "rootUri": "file:///Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.16.1",
       "packageUri": "lib/",
@@ -272,7 +278,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-09-04T07:54:50.811319Z",
+  "generated": "2020-09-05T16:47:29.016976Z",
   "generator": "pub",
   "generatorVersion": "2.9.2"
 }

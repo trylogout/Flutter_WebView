@@ -1,4 +1,7 @@
 # This is a generated file; do not edit or check into version control.
+connectivity=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.4.9+2/
+connectivity_for_web=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_for_web-0.3.1+2/
+connectivity_macos=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_macos-0.1.0+4/
 flutter_downloader=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_downloader-1.5.0/
 path_provider=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.14/
 path_provider_linux=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-0.0.1+2/
@@ -9,4 +12,5 @@ url_launcher_linux=/Users/constantinemorozov/Downloads/development/flutter/.pub-
 url_launcher_macos=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_macos-0.0.1+7/
 url_launcher_web=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_web-0.1.3+1/
 webview_flutter=/Users/constantinemorozov/Downloads/development/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-0.3.22+1/
+appsflyer_sdk=/Users/constantinemorozov/Документы/GIT_RESP/Flutter_WebView/ext/appsflyer-flutter-plugin/
 flutter_webview_plugin=/Users/constantinemorozov/Документы/GIT_RESP/Flutter_WebView/ext/flutter_webview_plugin/

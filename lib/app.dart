@@ -2,20 +2,17 @@ import 'dart:async';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-
-// Future<bool> _exitApp(BuildContext context) async {
-//   if (await controllerGlobal.canGoBack()) {
-//     controllerGlobal.goBack();
-//   } else {
-//     Scaffold.of(context).showSnackBar(
-//       const SnackBar(content: Text("No back history item")),
-//     );
-//     return Future.value(false);
-//   }
-// }
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:connectivity/connectivity.dart';
 
 String selectedUrl = 'https://nw3ke.csb.app';
 String dev_ID = "edd67iJkn2KvUu77AH4BQf";
+bool notFirstLoad = false;
+String uid = '';
+Future<String> _uid;
 
 // ignore: prefer_collection_literals
 final Set<JavascriptChannel> jsChannels = [
@@ -109,8 +106,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // Map _source = {ConnectivityResult.none: false};
+  // MyConnectivity _connectivity = MyConnectivity.instance;
   // Instance of WebView plugin
   final flutterWebViewPlugin = FlutterWebviewPlugin();
+
+  var asyncWidget;
+
+  // AppsFlyerPlugin
+  AppsflyerSdk _appsflyerSdk;
 
   // On destroy stream
   StreamSubscription _onDestroy;
@@ -141,6 +145,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
+    final AppsFlyerOptions options = AppsFlyerOptions(
+        afDevKey: "edd67iJkn2KvUu77AH4BQf",
+        appId: "WebViewMaster",
+        showDebug: true);
+
+    _appsflyerSdk = AppsflyerSdk(options);
+
+    // _connectivity.initialise();
+    // _connectivity.myStream.listen((source) {
+    //   setState(() => _source = source);
+    // });
+
     flutterWebViewPlugin.close();
 
     _urlCtrl.addListener(() {
@@ -160,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
         setState(() {
-          if (url.contains('nw3ke')) {
+          if ((url.contains('nw3ke')) || (url.startsWith('file:///'))) {
             print('onUrlChanged: $url');
           } else {
             _launchURL(url);
@@ -216,9 +232,63 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future _getAsyncUID() async {
+    Future<String> result = _appsflyerSdk.getAppsFlyerUID();
+    print(result);
+    return result;
+  }
+
+  Future<String> _getUID() async {
+    uid = await _getAsyncUID();
+    print('uid=' + uid);
+    return uid;
+  }
+
+  // @override
+  Widget build(BuildContext context) {
+    //   // if (notFirstLoad) {
+    //   //   switch (_source.keys.toList()[0]) {
+    //   //     case ConnectivityResult.none:
+    //   //       flutterWebViewPlugin
+    //   //           .launch('file:///android_asset/flutter_assets/assets/index.html');
+    //   //       print('ConnectivityResult.NONE');
+    //   //       break;
+    //   //     case ConnectivityResult.mobile:
+    //   //       flutterWebViewPlugin.launch(selectedUrl);
+    //   //       print('ConnectivityResult.mobile');
+    //   //       break;
+    //   //     case ConnectivityResult.wifi:
+    //   //       print('ConnectivityResult.wifi');
+    //   //       flutterWebViewPlugin.launch(selectedUrl);
+    //   //   }
+    //   // }
+    //   // notFirstLoad = true;
+
+    if (!(notFirstLoad)) {
+      _getUID().then((value) {
+        setState(() {
+          uid = value;
+        });
+      });
+
+      if (uid == '') {
+        print('Loading');
+        return MaterialApp(home: Scaffold());
+      } else {
+        notFirstLoad = true;
+        print(uid);
+        print('URL=' + selectedUrl + uid);
+        flutterWebViewPlugin.launch(selectedUrl + uid);
+      }
+    } else {
+      return MaterialApp(home: Scaffold(body: Text('MAIN APP')));
+    }
+  }
+
   @override
   void dispose() {
-    // Every listener should be canceled, the same should be done with this stream.
+    //_connectivity.disposeStream();
+
     _onDestroy.cancel();
     _onUrlChanged.cancel();
     _onStateChanged.cancel();
@@ -231,9 +301,42 @@ class _MyHomePageState extends State<MyHomePage> {
 
     super.dispose();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    flutterWebViewPlugin.launch(selectedUrl);
-  }
 }
+
+// class MyConnectivity {
+//   MyConnectivity._internal();
+
+//   static final MyConnectivity _instance = MyConnectivity._internal();
+
+//   static MyConnectivity get instance => _instance;
+
+//   Connectivity connectivity = Connectivity();
+
+//   StreamController controller = StreamController.broadcast();
+
+//   Stream get myStream => controller.stream;
+
+//   void initialise() async {
+//     ConnectivityResult result = await connectivity.checkConnectivity();
+//     _checkStatus(result);
+//     connectivity.onConnectivityChanged.listen((result) {
+//       _checkStatus(result);
+//     });
+//   }
+
+//   void _checkStatus(ConnectivityResult result) async {
+//     bool isOnline = false;
+//     try {
+//       final result = await InternetAddress.lookup('example.com');
+//       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+//         isOnline = true;
+//       } else
+//         isOnline = false;
+//     } on SocketException catch (_) {
+//       isOnline = false;
+//     }
+//     controller.sink.add({result: isOnline});
+//   }
+
+//   void disposeStream() => controller.close();
+// }

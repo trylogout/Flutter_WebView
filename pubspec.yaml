@@ -33,9 +33,13 @@ dependencies:
   permission_handler: ^5.0.0+hotfix.6
   url_launcher: ^5.4.11
   webview_flutter: 0.3.22+1
+  connectivity: ^0.4.9+2
 
   flutter_webview_plugin:
       path: ./ext/flutter_webview_plugin/
+  
+  appsflyer_sdk:
+    path: ./ext/appsflyer-flutter-plugin/
 
 dev_dependencies:
   flutter_test:
@@ -46,14 +50,14 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/index.html
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
